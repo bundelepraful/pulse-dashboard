@@ -21,12 +21,12 @@ export default function Home(){
     {
       id: "S102",
       destination: "Jalgaon",
-      status: "delivered",
+      status: "Delivered",
     },
     {
       id: "S103",
       destination: "Mumbai",
-      status: "delay",
+      status: "Delayed",
     },
     {
       id: "S104",
