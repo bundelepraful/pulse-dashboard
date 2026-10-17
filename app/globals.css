@@ -1,26 +1,137 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6fb;
+  color: #4086ab;
+  font-size: 14px;
+}
+
+main {
+  display: flex;
+  min-height: 100vh;
+}
+
+aside {
+  width: 220px;
+  flex-shrink: 0;
+  background: #46a6d9;
+  color: white;
+  padding: 25px 15px;
+}
+
+aside h2 {
+  margin: 0 10px 35px;
+  font-size: 28px;
+}
+
+aside p {
+  padding: 13px;
+  margin: 8px 0;
+  border-radius: 6px;
+  background: #4982a4;
+  font-size: 15px;
+}
+
+section {
+  flex: 1;
+  min-width: 0;
+  padding: 30px;
+}
+
+section > h1 {
+  font-size: 28px;
+  margin: 0 0 10px;
+}
+
+section > p {
+  color: #68738a;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 15px;
+  margin: 25px 0 35px;
+}
+
+.cards div {
+  background: white;
+  padding: 18px;
+  border: 1px solid #e1e6ef;
+  border-radius: 8px;
+}
+
+.cards h3 {
+  font-size: 26px;
+  margin: 0 0 10px;
+  color: #4658d9;
+}
+
+.cards p {
+  margin: 0;
+  color: #68738a;
+}
+
+input {
+  display: block;
+  width: 300px;
+  max-width: 100%;
+  padding: 11px;
+  margin: 15px 0;
+  border: 1px solid #ccd3e0;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+table {
+  width: 100%;
+  background: white;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #e5e9f0;
+}
+
+th {
+  background: #e9edfa;
+  font-size: 12px;
+}
+
+@media (max-width: 700px) {
+  main {
+    flex-direction: column;
+  }
+
+  aside {
+    width: 100%;
+  }
+
+  aside h2 {
+    margin-bottom: 15px;
+  }
+
+  section {
+    padding: 20px 12px;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 9px 6px;
+  }
 }
