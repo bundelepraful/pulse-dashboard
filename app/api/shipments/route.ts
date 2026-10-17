@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 
 const shipments = Array.from({ length: 1200 }, (_, i) => ({
@@ -9,7 +8,7 @@ const shipments = Array.from({ length: 1200 }, (_, i) => ({
 
 export async function GET(request: Request) {
   // Random delay between 150ms and 1500ms
-  const delay = Math.floor(Math.random() * 1351) + 1500; //delay between 1500ms and 2850ms
+  const delay = Math.floor(Math.random() * 1351) + 150; //delay between 150ms and 1500ms
 
   await new Promise((resolve) => setTimeout(resolve, delay));
 
