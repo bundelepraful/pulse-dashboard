@@ -5,10 +5,11 @@ import {useState} from "react";
 
 export default function Home(){
   const[search, setSearch]=useState("");
+  const[status,setStatus]= useState("All");
 
 
   //shipments data
-  const shipment = [
+  const shipments = [
     {
       id: "S101",
       destination: "Pune",
@@ -32,11 +33,17 @@ export default function Home(){
 ];
 
   //filtering the shipment data based on search input
-  const filtered = shipment.filter((s) => 
-    s.destination.toLowerCase().includes(search.toLowerCase()) ||
-    s.id.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = shipments.filter((s) =>{
+    
+    const matchesSearch =
+      s.destination.toLowerCase().includes(search.toLowerCase()) ||
+      s.id.toLowerCase().includes(search.toLowerCase());
 
+    const matchesStatus =
+      status === "All" || s.status === status;
+    return matchesSearch && matchesStatus;
+
+});
 //returning the filtered data
   return(
     <main>
@@ -81,6 +88,15 @@ export default function Home(){
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+        <select
+          value={status}
+            onChange={(e) => setStatus(e.target.value)}
+          >
+            <option value="All">All Statuses</option>
+            <option value="In Transit">In Transit</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Delayed">Delayed</option>
+          </select>
         
         <table>
           <thead>
