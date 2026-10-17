@@ -4,9 +4,12 @@
 import {useState} from "react";
 
 export default function Home(){
+//state for search input commit 1
   const[search, setSearch]=useState("");
+//state for status filter commit 2
   const[status,setStatus]= useState("All");
-
+//commit 3 
+  const[sortBy, setSortby] = useState("id");
 
   //shipments data
   const shipments = [
@@ -43,7 +46,11 @@ export default function Home(){
       status === "All" || s.status === status;
     return matchesSearch && matchesStatus;
 
-});
+})
+  .sort ((a, b) => a[sortBy as keyof typeof a].localeCompare(b[sortBy as keyof typeof b])
+);
+
+;
 //returning the filtered data
   return(
     <main>
@@ -88,14 +95,21 @@ export default function Home(){
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <select
-          value={status}
+        <select value={status}
             onChange={(e) => setStatus(e.target.value)}
           >
             <option value="All">All Statuses</option>
             <option value="In Transit">In Transit</option>
             <option value="Delivered">Delivered</option>
             <option value="Delayed">Delayed</option>
+          </select>
+
+        <select value={sortBy}
+            onChange={(e) => setSortby(e.target.value)}
+          >
+            <option value="id">sort by id</option>
+            <option value="destination">sort by destination</option>
+            <option value="status">sort by status</option>
           </select>
         
         <table>
