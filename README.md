@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pulse – Operations Dashboard
+
+Pulse is a shipment management dashboard I built using Next.js and TypeScript. The main goal of this project is to make it easier to view shipment information, track delivery statuses, and manage shipments from one place.
+
+## What can you do with Pulse?
+
+- View and search shipment records.
+- Filter shipments by status, region, and date range.
+- Sort shipment data using different columns.
+- Browse through 1,200 mock shipment records using pagination.
+- Open a shipment to view its details and simulated carrier history.
+- Update shipment statuses and see changes reflected in the UI.
+- View delayed shipments in the exceptions section.
+- Handle loading states and API errors.
+- Use the dashboard on desktop and smaller screens.
+
+The project also simulates API delays and occasional failures to test how the dashboard behaves when a request takes longer than expected or doesn't succeed.
+
+## Built With
+
+- Next.js and React
+- TypeScript
+- Tailwind CSS
+- Next.js API Route Handlers
+- Mock shipment data
 
 ## Getting Started
 
-First, run the development server:
+To run the project on your computer, follow these steps.
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/bundelepraful/pulse-dashboard.git
+cd pulse-dashboard
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Start the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Now open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Useful Commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Check the TypeScript code:
 
-## Learn More
+```bash
+npx tsc --noEmit
+```
 
-To learn more about Next.js, take a look at the following resources:
+Create a production build:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Start the development server:
 
-## Deploy on Vercel
+```bash
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## API Endpoints
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The project uses Next.js Route Handlers to work with shipment data.
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| GET | `/api/shipments` | Get a list of shipments |
+| PATCH | `/api/shipments/[id]` | Update a shipment's status |
+
+The shipments API supports cursor-based pagination and uses mock data for testing.
+
+You can test the list endpoint with:
+
+```bash
+curl "http://localhost:3000/api/shipments?cursor=0"
+```
+
+## Project Structure
+
+```text
+app/
+├── api/
+│   └── shipments/
+│       ├── data.ts
+│       ├── route.ts
+│       └── [id]/
+│           └── route.ts
+├── shipments/
+│   └── [id]/
+│       ├── page.tsx
+│       └── loading.tsx
+├── page.tsx
+├── layout.tsx
+└── globals.css
+```
+
+## Testing
+
+During development, I checked the project by running the TypeScript check and production build. I also tested the dashboard's search, filters, sorting, pagination, shipment status updates, detail page, and responsive layout.
+
+The production build completed successfully, and the TypeScript check reported no errors.
+
+## GitHub Repository
+
+You can find the source code here:
+
+[Pulse Dashboard on GitHub](https://github.com/bundelepraful/pulse-dashboard)
+
+## Note
+
+This project currently uses mock shipment data. It is intended for demonstration and testing, rather than tracking real shipments or connecting to a live logistics system.
