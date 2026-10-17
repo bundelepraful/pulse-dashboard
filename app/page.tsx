@@ -1,101 +1,107 @@
+
 "use client";
 
+import { useEffect, useState } from "react";
 
-import {useState} from "react";
+type Shipment = {
+  id: string;
+  destination: string;
+  status: string;
+};
 
-export default function Home(){
-//state for search input commit 1
-  const[search, setSearch]=useState("");
-//state for status filter commit 2
-  const[status,setStatus]= useState("All");
-//commit 3 
-  const[sortBy, setSortby] = useState("id");
+export default function Home() {
+  const [shipments, setShipments] = useState<Shipment[]>([]);
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("All");
+  const [sortBy, setSortBy] = useState("id");
+  const [cursor, setCursor] = useState<number | null>(0);
+  const [nextCursor, setNextCursor] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  //shipments data
-  const shipments = [
-    {
-      id: "S101",
-      destination: "Pune",
-      status: "In Transit",
-    },
-    {
-      id: "S102",
-      destination: "Jalgaon",
-      status: "Delivered",
-    },
-    {
-      id: "S103",
-      destination: "Mumbai",
-      status: "Delayed",
-    },
-    {
-      id: "S104",
-      destination: "Delhi",
-      status: "In Transit"
+  async function loadShipments(pageCursor: number) {
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(
+        `/api/shipments?cursor=${pageCursor}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Unable to load shipments. Please try again.");
+      }
+
+      const result = await response.json();
+
+      setShipments(result.data);
+      setNextCursor(result.nextCursor);
+      setCursor(pageCursor);
+    } catch {
+      setError("Failed to load shipments. Please try again.");
+    } finally {
+      setLoading(false);
     }
-];
+  }
 
-  //filtering the shipment data based on search input
-  const filtered = shipments.filter((s) =>{
-    
-    const matchesSearch =
-      s.destination.toLowerCase().includes(search.toLowerCase()) ||
-      s.id.toLowerCase().includes(search.toLowerCase());
+  useEffect(() => {
+    loadShipments(0);
+  }, []);
 
-    const matchesStatus =
-      status === "All" || s.status === status;
-    return matchesSearch && matchesStatus;
+  const filtered = shipments
+    .filter((s) => {
+      const matchesSearch =
+        s.id.toLowerCase().includes(search.toLowerCase()) ||
+        s.destination.toLowerCase().includes(search.toLowerCase());
 
-})
-  .sort ((a, b) => a[sortBy as keyof typeof a].localeCompare(b[sortBy as keyof typeof b])
-);
+      const matchesStatus =
+        status === "All" || s.status === status;
 
-;
-//returning the filtered data
-  return(
+      return matchesSearch && matchesStatus;
+    })
+    .sort((a, b) => {
+      if (sortBy === "destination") {
+        return a.destination.localeCompare(b.destination);
+      }
+
+      if (sortBy === "status") {
+        return a.status.localeCompare(b.status);
+      }
+
+      return a.id.localeCompare(b.id);
+    });
+
+  return (
     <main>
       <aside>
-        <h2>Pulse</h2>
-        <p>dashboard</p>
+        <h2>Pulse.</h2>
+        <p>Dashboard</p>
         <p>Shipments</p>
         <p>Exceptions</p>
       </aside>
 
-     
       <section>
-        <h1> Operations Dashboard</h1>
-        <p> Monitor Your Shipments in one place</p>
+        <h1>Operations Dashboard</h1>
+        <p>Monitor your shipments in one place.</p>
 
         <div className="cards">
-          <div>
-            <h3>1,248</h3>
-            <p> total shipments </p>
-          </div>
-
-           <div>
-            <h3>486</h3>
-            <p> In Transit </p>
-          </div>
-
-           <div>
-            <h3>692</h3>
-            <p> delivered </p>
-          </div>
-
-          <div>
-            <h3>24</h3>
-            <p> exceptions </p>
-          </div>
+          <div><h3>1,200</h3><p>Total Shipments</p></div>
+          <div><h3>400</h3><p>In Transit</p></div>
+          <div><h3>400</h3><p>Delivered</p></div>
+          <div><h3>400</h3><p>Delayed</p></div>
         </div>
 
-        
-        <h2> Shipments  </h2>
-        <input
-          placeholder="Search by destination or ID"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <select value={status}
+        <h2>Shipments</h2>
+
+        <div className="controls">
+          <input
+            placeholder="Search ID or destination"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+
+          <select
+            value={status}
             onChange={(e) => setStatus(e.target.value)}
           >
             <option value="All">All Statuses</option>
@@ -104,32 +110,72 @@ export default function Home(){
             <option value="Delayed">Delayed</option>
           </select>
 
-        <select value={sortBy}
-            onChange={(e) => setSortby(e.target.value)}
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
           >
-            <option value="id">sort by id</option>
-            <option value="destination">sort by destination</option>
-            <option value="status">sort by status</option>
+            <option value="id">Sort by ID</option>
+            <option value="destination">Sort by Destination</option>
+            <option value="status">Sort by Status</option>
           </select>
-        
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Destination</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((s) => (
-              <tr key={s.id}>
-                <td>{s.id}</td>
-                <td>{s.destination}</td>
-                <td>{s.status}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        </div>
+
+        {loading && <p>Loading shipments...</p>}
+
+        {error && (
+          <div>
+            <p role="alert">{error}</p>
+            <button onClick={() => loadShipments(cursor ?? 0)}>
+              Retry
+            </button>
+          </div>
+        )}
+
+        {!loading && !error && (
+          <>
+            <table>
+              <thead>
+                <tr>
+                  <th>Shipment ID</th>
+                  <th>Destination</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {filtered.map((s) => (
+                  <tr key={s.id}>
+                    <td>{s.id}</td>
+                    <td>{s.destination}</td>
+                    <td>{s.status}</td>
+                  </tr>
+                ))}
+
+                {filtered.length === 0 && (
+                  <tr>
+                    <td colSpan={3}>No shipments found.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+
+            <p>Page starts at record {cursor! + 1} of 1,200</p>
+
+            <button
+              disabled={cursor === 0 || loading}
+              onClick={() => loadShipments(Math.max(0, (cursor ?? 0) - 20))}
+            >
+              Previous Page
+            </button>
+
+            <button
+              disabled={nextCursor === null || loading}
+              onClick={() => loadShipments(nextCursor!)}
+            >
+              Next Page
+            </button>
+          </>
+        )}
       </section>
     </main>
   );

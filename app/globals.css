@@ -135,3 +135,23 @@ th {
     padding: 9px 6px;
   }
 }
+
+button {
+  padding: 10px 16px;
+  margin: 8px 8px 8px 0;
+  border: none;
+  border-radius: 5px;
+  background: #303d5c;
+  color: white;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+input, select {
+  margin: 5px;
+  padding: 10px;
+}
