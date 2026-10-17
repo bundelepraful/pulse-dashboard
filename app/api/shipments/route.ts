@@ -1,21 +1,15 @@
-import { NextResponse } from "next/server";
 
-const shipments = Array.from({ length: 1200 }, (_, i) => ({
-  id: `SHP-${1000 + i}`,
-  destination: ["Pune", "Mumbai", "Delhi", "Chennai", "Bengaluru"][i % 5],
-  status: ["In Transit", "Delivered", "Delayed"][i % 3],
-}));
+import { NextResponse } from "next/server";
+import { shipments } from "./data";
 
 export async function GET(request: Request) {
-  // Random delay between 150ms and 1500ms
-  const delay = Math.floor(Math.random() * 1351) + 150; //delay between 150ms and 1500ms
-
+  const delay = Math.floor(Math.random() * 1351) + 150;
   await new Promise((resolve) => setTimeout(resolve, delay));
 
-  // 3% chance of a read error
+  // Simulate a 3% read failure
   if (Math.random() < 0.03) {
     return NextResponse.json(
-      { error: "Failed to load shipments. Please try again." },
+      { error: "Failed to fetch shipments" },
       { status: 500 }
     );
   }
@@ -23,7 +17,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const cursor = Math.max(
     0,
-    Number(searchParams.get("cursor") || 0)
+    Number(searchParams.get("cursor") ?? 0) || 0
   );
   const limit = 20;
 
