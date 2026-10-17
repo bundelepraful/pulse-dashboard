@@ -5,6 +5,7 @@ export type Shipment = {
   status: string;
   region: string;
   shipmentDate: string;
+  exceptionStatus?: "open" | "resolved" | "escalated";
 };
 
 export const shipments: Shipment[] = Array.from(
