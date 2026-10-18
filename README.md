@@ -232,7 +232,9 @@ Runtime checks were performed manually. Automated test coverage has not yet been
 
 ## Walkthrough
 
-**Demo video:** Add the link to your 3–5 minute screen recording here before submitting.
+**Demo video:** 
+
+[Watch the Pulse Dashboard Walkthrough](PASTE_YOUR_VIDEO_LINK_HERE)
 
 The walkthrough should demonstrate the dashboard, filtering and pagination, shipment details, exception resolution and escalation, and the application's error handling.
 
