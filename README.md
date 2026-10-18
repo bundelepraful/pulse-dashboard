@@ -234,7 +234,7 @@ Runtime checks were performed manually. Automated test coverage has not yet been
 
 **Demo video:** 
 
-[Watch the Pulse Dashboard Walkthrough](PASTE_YOUR_VIDEO_LINK_HERE)
+[Watch the Pulse Dashboard Walkthrough](https://drive.google.com/file/d/1OGmaSRrTMnfj9qKZnsLGL2srdRkIsP6q/view?usp=share_link)
 
 The walkthrough should demonstrate the dashboard, filtering and pagination, shipment details, exception resolution and escalation, and the application's error handling.
 
